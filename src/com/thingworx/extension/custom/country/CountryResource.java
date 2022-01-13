@@ -32,14 +32,8 @@ public class CountryResource extends Resource {
 
   @ThingworxServiceDefinition(name = "getCountries", description = "", category = "", isAllowOverride = false, aspects = {"isAsync:false"})
   @ThingworxServiceResult(name = "result", description = "", baseType = "INFOTABLE", aspects = {"isEntityDataShape:true", "dataShape:ds_Country"})
-  public InfoTable getCountries(@ThingworxServiceParameter(name = "sortByName", description = "", baseType = "BOOLEAN") Boolean sortByName) throws Exception {
-    return this.getCountriesInDefinedLanguage(this.getUserLanguage(), sortByName);
-  }
-
-  @ThingworxServiceDefinition(name = "getCountriesInDefinedLanguage", description = "", category = "", isAllowOverride = false, aspects = {"isAsync:false"})
-  @ThingworxServiceResult(name = "result", description = "", baseType = "INFOTABLE", aspects = {"isEntityDataShape:true", "dataShape:ds_Country"})
-  public InfoTable getCountriesInDefinedLanguage(@ThingworxServiceParameter(name = "language", description = "", baseType = "STRING") String language, @ThingworxServiceParameter(name = "sortByName", description = "", baseType = "BOOLEAN") Boolean sortByName) throws Exception {
-    Locale locale = new Locale(language != null ? language : "en");
+  public InfoTable getCountries(@ThingworxServiceParameter(name = "language", description = "", baseType = "STRING") String language, @ThingworxServiceParameter(name = "sortByName", description = "", baseType = "BOOLEAN") Boolean sortByName) throws Exception {
+    Locale locale = new Locale(language != null ? language : this.getUserLanguage());
     List<Locale> localeLanguage = List.of(locale);
 
     InfoTable table = InfoTableInstanceFactory.createInfoTableFromDataShape("ds_Country");
