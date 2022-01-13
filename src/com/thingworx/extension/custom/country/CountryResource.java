@@ -39,10 +39,11 @@ public class CountryResource extends Resource {
   @ThingworxServiceDefinition(name = "getCountriesInDefinedLanguage", description = "", category = "", isAllowOverride = false, aspects = {"isAsync:false"})
   @ThingworxServiceResult(name = "result", description = "", baseType = "INFOTABLE", aspects = {"isEntityDataShape:true", "dataShape:ds_Country"})
   public InfoTable getCountriesInDefinedLanguage(@ThingworxServiceParameter(name = "language", description = "", baseType = "STRING") String language, @ThingworxServiceParameter(name = "sortByName", description = "", baseType = "BOOLEAN") Boolean sortByName) throws Exception {
-    List<Locale> localeLanguage = List.of(new Locale(language != null ? language : "en"));
+    Locale locale = new Locale(language != null ? language : "en");
+    List<Locale> localeLanguage = List.of(locale);
 
     InfoTable table = InfoTableInstanceFactory.createInfoTableFromDataShape("ds_Country");
-    ISO.forEach(isoCountry -> this.addRow(table, isoCountry, localeLanguage, localeLanguage.get(0)));
+    ISO.forEach(isoCountry -> this.addRow(table, isoCountry, localeLanguage, locale));
     this.sortByName(table, sortByName);
     return table;
   }
