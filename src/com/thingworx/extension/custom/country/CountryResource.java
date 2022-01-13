@@ -33,7 +33,7 @@ public class CountryResource extends Resource {
   @ThingworxServiceDefinition(name = "getCountries", description = "", category = "", isAllowOverride = false, aspects = {"isAsync:false"})
   @ThingworxServiceResult(name = "result", description = "", baseType = "INFOTABLE", aspects = {"isEntityDataShape:true", "dataShape:ds_Country"})
   public InfoTable getCountries(@ThingworxServiceParameter(name = "language", description = "", baseType = "STRING") String language, @ThingworxServiceParameter(name = "sortByName", description = "", baseType = "BOOLEAN") Boolean sortByName) throws Exception {
-    Locale locale = new Locale(language != null ? language : this.getUserLanguage());
+    Locale locale = new Locale(language != null && !language.isEmpty() ? language.toLowerCase() : this.getUserLanguage());
     List<Locale> localeLanguage = List.of(locale);
 
     InfoTable table = InfoTableInstanceFactory.createInfoTableFromDataShape("ds_Country");
@@ -56,7 +56,7 @@ public class CountryResource extends Resource {
   private String getUserLanguage() throws Exception {
     SessionInfo currentSessionInfo = (SessionInfo) EntityUtilities.findEntity("CurrentSessionInfo", ThingworxRelationshipTypes.Resource);
     String language = currentSessionInfo.GetCurrentUserLanguage();
-    return "Default".equalsIgnoreCase(language) || "System".equalsIgnoreCase(language) ? "en" : language.substring(0, 2);
+    return language == null || language.isEmpty() || "Default".equalsIgnoreCase(language) || "System".equalsIgnoreCase(language) ? "en" : language.substring(0, 2).toLowerCase();
   }
 
   private void addRow(InfoTable table, String isoCountry, List<Locale> localeLanguages, Locale langForLanguages) {
